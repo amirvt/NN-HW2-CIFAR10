@@ -35,17 +35,15 @@ pool_default = 2
 dense_dim_default = 512
 dropout_default = 0.
 active_default = 'relu'
-batch_size_default = 256
+batch_size_default = 64
 epochs_default = 50
 
 
 # %%
 
-def build_model(
-        conv_dims=conv_dims_default, filters=filters_default, stride=stride_default,
-        pool=pool_default, active=active_default, dense_dim=dense_dim_default, dropout=dropout_default,
- opt_func=keras.optimizers.adam, loss=keras.losses.categorical_crossentropy
-):
+def build_model(conv_dims=conv_dims_default, filters=filters_default, stride=stride_default,
+                pool=pool_default, active=active_default, dense_dim=dense_dim_default, dropout=dropout_default,
+                opt_func=keras.optimizers.adam, loss=keras.losses.categorical_crossentropy):
     _model = Sequential()
 
     for i, dim in enumerate(conv_dims):
@@ -79,7 +77,6 @@ def build_model(
 
 def train(_model, _x_train, _y_train,
           batch_size=batch_size_default, epochs=epochs_default):
-
     _hist = _model.fit(_x_train, _y_train,
                        batch_size=batch_size,
                        epochs=epochs,
@@ -111,9 +108,9 @@ for active in actives:
     save_hist('4c-' + active, hists_4c)
 
 # %% 4D - compare ADAM and SGD over 10 epochs
-model = build_model(opt_func=keras.optimizers.SGD)
 # noinspection PyTypeChecker
-hist_4d = train(model, x_train, y_train )
+model = build_model(opt_func=keras.optimizers.SGD)
+hist_4d = train(model, x_train, y_train)
 save_hist('4d-sgd', hist_4d)
 
 # %% 4E - reduce train size to 600
