@@ -36,7 +36,7 @@ dense_dim_default = 512
 dropout_default = 0.
 active_default = 'relu'
 batch_size_default = 64
-epochs_default = 50
+epochs_default = 100
 
 
 # %%
@@ -76,12 +76,13 @@ def build_model(conv_dims=conv_dims_default, filters=filters_default, stride=str
 
 
 def train(_model, _x_train, _y_train,
-          batch_size=batch_size_default, epochs=epochs_default):
+          batch_size=batch_size_default, epochs=epochs_default, verbose=1):
     _hist = _model.fit(_x_train, _y_train,
                        batch_size=batch_size,
                        epochs=epochs,
                        validation_data=(x_test, y_test),
-                       shuffle=True)
+                       shuffle=True,
+                       verbose=verbose)
     return _hist
 
 
@@ -94,7 +95,7 @@ def save_hist(file_name, history):
 
 
 model = build_model()
-hist = train(model, x_train, y_train)
+hist = train(model, x_train, y_train, verbose=2)
 
 save_hist('4b', hist)
 
@@ -117,15 +118,16 @@ save_hist('4d-sgd', hist_4d)
 
 x_train_small, y_train_small = resample(x_train, y_train, n_samples=600)
 model = build_model()
-hist_small = train(model, x_train_small, y_train_small, epochs=epochs_default // 4)
+hist_small = train(model, x_train_small, y_train_small, epochs=epochs_default)
 save_hist('4e', hist_small)
 
 # %% 4f - dropout and data augmention
 
-dropouts = [0.1, 0.2, 0.3, 0.4]
+# dropouts = [0.1, 0.2, 0.3, 0.4, 0.6]
+dropouts = [0.4]
 for dropout in dropouts:
     model = build_model(dropout=dropout)
-    hists_4f = train(model, x_train, y_train)
+    hists_4f = train(model, x_train, y_train, epochs=100, verbose=2)
     save_hist('4f-' + str(dropout), hists_4f)
 
 # %% 4f - augment
@@ -167,7 +169,7 @@ datagen.fit(x_train)
 hists_4f2 = model.fit_generator(datagen.flow(x_train, y_train,
                                              batch_size=batch_size_default),
                                 steps_per_epoch=len(x_train) / batch_size_default,
-                                epochs=epochs_default,
+                                epochs=100,
                                 validation_data=(x_test, y_test),
                                 workers=4)
 save_hist('4f2', hists_4f2)
@@ -177,7 +179,7 @@ model = build_model(active='tanh', dropout=0.4)
 asd = model.fit_generator(datagen.flow(x_train, y_train,
                                              batch_size=batch_size_default),
                                 steps_per_epoch=len(x_train) / batch_size_default,
-                                epochs=epochs_default,
+                                epochs=100,
                                 validation_data=(x_test, y_test),
                                 workers=4,
                           verbose=2)

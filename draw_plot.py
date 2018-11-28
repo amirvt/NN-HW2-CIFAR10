@@ -107,7 +107,103 @@ for i in ['relu', 'sigmoid', 'tanh']:
     for j in ['train', 'test']:
         legends.append(' '.join((i, j)))
 
-plt.legend(legends, loc='upper left', bbox_to_anchor=(1, 0.5))
+plt.legend(legends, loc='upper left', bbox_to_anchor=(0, -0.2),
+           fancybox=True, shadow=True, ncol=3)
 plt.title(" Comparison of activation functions")
 # plt.show()
-plt.savefig('plots/4c.png')
+plt.savefig('plots/4c.png', dpi=300)
+
+#%% 4D
+hists_4d = [hist_4b, load_history('4d-sgd')]
+plt.clf()
+plt.tight_layout()
+ax = plt.gca()
+for history in hists_4d:
+    color = next(ax._get_lines.prop_cycler)['color']
+    plt.plot(history['acc'], color=color)
+    plt.plot(history['val_acc'], '--', color=color)
+
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+
+legends = []
+for i in ['adam', 'sgd']:
+    for j in ['train', 'test']:
+        legends.append(' '.join((i, j)))
+
+plt.legend(legends, loc='upper left', bbox_to_anchor=(0, -0.2),
+           fancybox=True, shadow=True, ncol=2)
+plt.title("Comparison of Optimizer Algorithms")
+plt.show()
+# plt.savefig('plots/4d.png', dpi=300)
+#%% 4E
+hists_4e = [hist_4b, load_history('4e')]
+plt.clf()
+plt.tight_layout()
+ax = plt.gca()
+for history in hists_4e:
+    color = next(ax._get_lines.prop_cycler)['color']
+    plt.plot(history['acc'], color=color)
+    plt.plot(history['val_acc'], '--', color=color)
+
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+
+legends = []
+for i in ['60k samples', '600 samples']:
+    for j in ['train', 'test']:
+        legends.append(' '.join((i, j)))
+
+plt.legend(legends, loc='upper left', bbox_to_anchor=(0, -0.2),
+           fancybox=True, shadow=True, ncol=2)
+plt.title("Comparison of Training size")
+# plt.show()
+plt.savefig('plots/4e.png', dpi=300)
+#%% 4F
+hists_4f = [hist_4b, load_history('4f-0.2'), load_history('4f-0.4'), load_history('4f-0.6')]
+sns.set_palette("deep")
+plt.clf()
+plt.tight_layout()
+ax = plt.gca()
+for history in hists_4f:
+    color = next(ax._get_lines.prop_cycler)['color']
+    plt.plot(history['acc'], color=color)
+    plt.plot(history['val_acc'], '--', color=color)
+
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+
+legends = []
+for i in ['.0', '.2', '.4', '.6']:
+    for j in ['train', 'test']:
+        legends.append(' '.join((i, j)))
+
+plt.legend(legends, loc='upper left', bbox_to_anchor=(0, -0.2),
+           fancybox=True, shadow=True, ncol=4)
+plt.title("Comparison of dropout probability")
+# plt.show()
+plt.savefig('plots/4f.png', dpi=300)
+
+# %%
+hists_4f2 = [hist_4b, load_history('4f2')]
+plt.clf()
+plt.tight_layout()
+ax = plt.gca()
+for history in hists_4f2:
+    color = next(ax._get_lines.prop_cycler)['color']
+    plt.plot(history['acc'], color=color)
+    plt.plot(history['val_acc'], '--', color=color)
+
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+
+legends = []
+for i in ['no data aug,', 'with data aug,']:
+    for j in ['train', 'test']:
+        legends.append(' '.join((i, j)))
+
+plt.legend(legends, loc='upper left', bbox_to_anchor=(0, -0.2),
+           fancybox=True, shadow=True, ncol=2)
+plt.title("Effect of Data Augmentation on accuracy")
+plt.show()
+# plt.savefig('plots/4f2.png', dpi=300)
