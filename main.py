@@ -171,3 +171,13 @@ hists_4f2 = model.fit_generator(datagen.flow(x_train, y_train,
                                 validation_data=(x_test, y_test),
                                 workers=4)
 save_hist('4f2', hists_4f2)
+
+#%%
+model = build_model(active='tanh', dropout=0.4)
+asd = model.fit_generator(datagen.flow(x_train, y_train,
+                                             batch_size=batch_size_default),
+                                steps_per_epoch=len(x_train) / batch_size_default,
+                                epochs=epochs_default,
+                                validation_data=(x_test, y_test),
+                                workers=4,
+                          verbose=2)

@@ -1,17 +1,20 @@
-import itertools
-import pandas as pd
+import pickle
 import numpy as np
-from matplotlib import pyplot as plt
-import keras
-from keras.datasets import mnist
-from sklearn.metrics import confusion_matrix
-# import seaborn as sns
-
-from matplotlib import rcParams
+import pandas as pd
 import seaborn as sns
+from matplotlib import pyplot as plt
+from matplotlib import rcParams
+from sklearn.metrics import confusion_matrix
+
+# import seaborn as sns
 
 sns.set()
 rcParams.update({'figure.autolayout': True})
+
+
+def load_history(file_name):
+    with open('hists/' + file_name, 'rb') as f:
+        return pickle.load(f)
 
 
 def plot_confusion_matrix(model, x_test, y_test, title, classes):
@@ -33,22 +36,7 @@ def plot_confusion_matrix(model, x_test, y_test, title, classes):
 
     print_confusion_matrix(cm, classes)
 
-    # plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
-    # plt.title(title)
-    # plt.colorbar()
-    # tick_marks = np.arange(10)
-    # plt.xticks(tick_marks, range(10))
-    # plt.yticks(tick_marks, range(10))
-    #
-    # fmt = '.2f'
-    # thresh = cm.max() / 2.
-    # for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-    #     plt.text(j, i, format(cm[i, j], fmt),
-    #              horizontalalignment="center",
-    #              color="white" if cm[i, j] > thresh else "black")
-    #
-    # plt.ylabel('True label')
-    # plt.xlabel('Predicted label')
+
     plt.tight_layout()
 
     # plt.show()
@@ -97,16 +85,29 @@ def print_confusion_matrix(confusion_matrix, class_names, figsize=(8, 6), fontsi
     return fig
 
 
-def plot_history(histories, titles):
-    for history, title in zip(histories, titles):
-        plt.clf()
-        plt.tight_layout()
-        plt.plot(history.history['acc'])
-        plt.plot(history.history['val_acc'])
-        plt.title('model accuracy')
-        plt.ylabel('accuracy')
-        plt.xlabel('epoch')
-        plt.legend(['train', 'test'], loc='upper left')
-        plt.title(title + " Accuracy")
-        # plt.show()
-        plt.savefig('plots/' + title + 'accuracy .png')
+# %% 4B
+
+hist_4b = load_history('4b')
+
+# %% 4C
+hists_4c = [hist_4b, load_history('4c-sigmoid'), load_history('4c-tanh')]
+plt.clf()
+plt.tight_layout()
+ax = plt.gca()
+for history in hists_4c:
+    color = next(ax._get_lines.prop_cycler)['color']
+    plt.plot(history['acc'], color=color)
+    plt.plot(history['val_acc'], '--', color=color)
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+
+legends = []
+for i in ['relu', 'sigmoid', 'tanh']:
+    for j in ['train', 'test']:
+        legends.append(' '.join((i, j)))
+
+plt.legend(legends, loc='upper left', bbox_to_anchor=(1, 0.5))
+plt.title(" Comparison of activation functions")
+# plt.show()
+plt.savefig('plots/4c.png')
