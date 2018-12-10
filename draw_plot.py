@@ -36,7 +36,6 @@ def plot_confusion_matrix(model, x_test, y_test, title, classes):
 
     print_confusion_matrix(cm, classes)
 
-
     plt.tight_layout()
 
     # plt.show()
@@ -88,7 +87,22 @@ def print_confusion_matrix(confusion_matrix, class_names, figsize=(8, 6), fontsi
 # %% 4B
 
 hist_4b = load_history('4b')
+plt.clf()
+plt.tight_layout()
+ax = plt.gca()
+color = next(ax._get_lines.prop_cycler)['color']
+plt.plot(hist_4b['acc'], color=color)
+plt.plot(hist_4b['val_acc'], '--', color=color)
+plt.title('Model Accuracy')
+plt.xlabel('Accuracy')
+plt.ylabel('Epoch')
+# plt.xlim(-1, 60)
 
+legends = ['train', 'test']
+plt.legend(legends, loc='upper left', bbox_to_anchor=(0, -0.2),
+           fancybox=True, shadow=True, ncol=1)
+# plt.savefig('plots/4b.png', dpi=300)
+plt.show()
 # %% 4C
 hists_4c = [hist_4b, load_history('4c-sigmoid'), load_history('4c-tanh')]
 plt.clf()
@@ -113,7 +127,7 @@ plt.title(" Comparison of activation functions")
 # plt.show()
 plt.savefig('plots/4c.png', dpi=300)
 
-#%% 4D
+# %% 4D
 hists_4d = [hist_4b, load_history('4d-sgd')]
 plt.clf()
 plt.tight_layout()
@@ -134,9 +148,14 @@ for i in ['adam', 'sgd']:
 plt.legend(legends, loc='upper left', bbox_to_anchor=(0, -0.2),
            fancybox=True, shadow=True, ncol=2)
 plt.title("Comparison of Optimizer Algorithms")
-plt.show()
-# plt.savefig('plots/4d.png', dpi=300)
-#%% 4E
+# plt.show()
+plt.savefig('plots/4d.png', dpi=300)
+
+
+
+
+
+# %% 4E
 hists_4e = [hist_4b, load_history('4e')]
 plt.clf()
 plt.tight_layout()
@@ -159,7 +178,7 @@ plt.legend(legends, loc='upper left', bbox_to_anchor=(0, -0.2),
 plt.title("Comparison of Training size")
 # plt.show()
 plt.savefig('plots/4e.png', dpi=300)
-#%% 4F
+# %% 4F
 hists_4f = [hist_4b, load_history('4f-0.2'), load_history('4f-0.4'), load_history('4f-0.6')]
 sns.set_palette("deep")
 plt.clf()
@@ -181,8 +200,8 @@ for i in ['.0', '.2', '.4', '.6']:
 plt.legend(legends, loc='upper left', bbox_to_anchor=(0, -0.2),
            fancybox=True, shadow=True, ncol=4)
 plt.title("Comparison of dropout probability")
-# plt.show()
-plt.savefig('plots/4f.png', dpi=300)
+plt.show()
+# plt.savefig('plots/4f.png', dpi=300)
 
 # %%
 hists_4f2 = [hist_4b, load_history('4f2')]
@@ -205,5 +224,25 @@ for i in ['no data aug,', 'with data aug,']:
 plt.legend(legends, loc='upper left', bbox_to_anchor=(0, -0.2),
            fancybox=True, shadow=True, ncol=2)
 plt.title("Effect of Data Augmentation on accuracy")
+# plt.show()
+plt.savefig('plots/4f2.png', dpi=300)
+
+#%%
+
+hist_4b = load_history('final3')
+plt.clf()
+plt.tight_layout()
+ax = plt.gca()
+color = next(ax._get_lines.prop_cycler)['color']
+plt.plot(hist_4b['acc'], color=color)
+plt.plot(hist_4b['val_acc'], '--', color=color)
+plt.title('Model Accuracy')
+plt.xlabel('Accuracy')
+plt.ylabel('Epoch')
+# plt.xlim(-1, 60)
+
+legends = ['train', 'test']
+plt.legend(legends, loc='upper left', bbox_to_anchor=(0, -0.15),
+           fancybox=True, shadow=True, ncol=2)
+# plt.savefig('plots/final.png', dpi=300)
 plt.show()
-# plt.savefig('plots/4f2.png', dpi=300)
